@@ -141,6 +141,7 @@ def detect_signature(
     return {
         "signature": signature_str,
         "detectedType": detected_type,
+        "fileType": detected_type,
         "isMismatch": is_mismatch,
         "warning": warning
     }

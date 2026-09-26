@@ -3,7 +3,7 @@ Malicious File Analyzer - Hashing Module
 Owner: Member 1 (Team Lead)
 
 Calculates MD5 and SHA-256 cryptographic hashes for uploaded files.
-Streams files in chunks to handle arbitrary file sizes efficiently.
+Supports both file paths and raw binary bytes.
 """
 
 import hashlib
@@ -39,3 +39,7 @@ def compute_hashes(file_input: Union[str, bytes]) -> Dict[str, str]:
         "md5": md5_hasher.hexdigest(),
         "sha256": sha256_hasher.hexdigest()
     }
+
+
+# Alias for integration compatibility with services
+calculate_hashes = compute_hashes
