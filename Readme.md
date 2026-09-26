@@ -131,8 +131,8 @@ The Team Lead owns the core static-analysis architecture and final integration b
 
 ### 1. Prerequisites
 
-* **Python 3.8+** installed on your system (Python 3.10–3.14 supported).
-* `pip` package manager.
+- **Python 3.8+** installed on your system (Python 3.10–3.14 supported).
+- `pip` package manager.
 
 ---
 
@@ -148,19 +148,23 @@ cd malicious-file-analyzer
 ### 3. Create & Activate a Virtual Environment
 
 #### Windows (Command Prompt):
+
 ```cmd
 python -m venv venv
 venv\Scripts\activate
 ```
 
 #### Windows (PowerShell):
+
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
-*(If PowerShell restricts script execution, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first).*
+
+_(If PowerShell restricts script execution, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first)._
 
 #### Linux / macOS:
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
@@ -177,12 +181,13 @@ pip install -r requirements.txt
 ```
 
 #### Packages Installed:
-* `fastapi>=0.100.0` — High-performance backend web framework
-* `uvicorn>=0.22.0` — Lightning-fast ASGI production server
-* `python-multipart>=0.0.6` — Multipart file upload support
-* `pefile>=2023.2.7` — Windows Portable Executable (PE) static header parsing
-* `pytest>=7.4.0` — Automated unit and integration test suite
-* `httpx>=0.24.0` — Async HTTP test client
+
+- `fastapi>=0.100.0` — High-performance backend web framework
+- `uvicorn>=0.22.0` — Lightning-fast ASGI production server
+- `python-multipart>=0.0.6` — Multipart file upload support
+- `pefile>=2023.2.7` — Windows Portable Executable (PE) static header parsing
+- `pytest>=7.4.0` — Automated unit and integration test suite
+- `httpx>=0.24.0` — Async HTTP test client
 
 ---
 
@@ -191,17 +196,21 @@ pip install -r requirements.txt
 You can start the FastAPI backend server using any of the following methods:
 
 #### Method A: Direct Python Script (Recommended)
+
 ```bash
 python backend/app.py
 ```
 
 #### Method B: Direct Uvicorn Command
+
 ```bash
 uvicorn backend.app:app --host 0.0.0.0 --port 5000 --reload
 ```
 
 #### Method C: One-Click Batch Script (Windows)
+
 Double-click:
+
 ```text
 start_backend.bat
 ```
@@ -212,11 +221,12 @@ start_backend.bat
 
 Once started, the backend runs on port `5000`:
 
-* **API Health Check:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
-* **Interactive Swagger UI Docs:** [http://localhost:5000/docs](http://localhost:5000/docs)
-* **ReDoc Interactive Reference:** [http://localhost:5000/redoc](http://localhost:5000/redoc)
+- **API Health Check:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
+- **Interactive Swagger UI Docs:** [http://localhost:5000/docs](http://localhost:5000/docs)
+- **ReDoc Interactive Reference:** [http://localhost:5000/redoc](http://localhost:5000/redoc)
 
 The frontend connects to this backend via the base URL configured in:
+
 ```text
 frontend/js/api.js
 ```
@@ -228,15 +238,19 @@ frontend/js/api.js
 To view and interact with the user interface:
 
 #### Option A: VS Code Live Server (Recommended)
+
 Right-click `frontend/index.html` in VS Code and select **"Open with Live Server"** (typically serves on `http://127.0.0.1:5500/frontend/index.html`).
 
 #### Option B: Python Simple HTTP Server
+
 ```bash
 python -m http.server 8000 --directory frontend
 ```
+
 Then navigate to: [http://localhost:8000/index.html](http://localhost:8000/index.html)
 
 #### Option C: Direct Browser Opening
+
 Double-click `frontend/index.html` directly in your file explorer to open it in your browser.
 
 ---
@@ -246,11 +260,13 @@ Double-click `frontend/index.html` directly in your file explorer to open it in 
 Run the full 44-test unit test suite covering hashing, signatures, entropy, strings, PE inspection, file validation, risk scoring, and API routes:
 
 #### Via Pytest:
+
 ```bash
 pytest -v tests/
 ```
 
 #### Via Windows Batch Script:
+
 Double-click `run_tests.bat`.
 
 ---
@@ -259,13 +275,13 @@ Double-click `run_tests.bat`.
 
 The repository includes 5 non-executable, 100% safe test fixtures in `test_files/` to verify every static analysis component without running real malware:
 
-| File | Size | Purpose | Expected Risk |
-| :--- | ---: | :--- | :--- |
-| `normal_test.txt` | 215 B | Baseline upload, text metadata, MD5/SHA-256 | **LOW** |
-| `normal_test.csv` | 93 B | Non-executable structured document | **LOW** |
-| `strings_test.txt` | 213 B | Predictable readable strings & URL extraction | **LOW** |
-| `high_entropy_test.bin` | 4,096 B | High Shannon entropy test (~7.96) | **HIGH** |
-| `fake_pe_signature_test.bin` | 512 B | `MZ` file signature & graceful PE parser test | **LOW** |
+| File                         |    Size | Purpose                                       | Expected Risk |
+| :--------------------------- | ------: | :-------------------------------------------- | :------------ |
+| `normal_test.txt`            |   215 B | Baseline upload, text metadata, MD5/SHA-256   | **LOW**       |
+| `normal_test.csv`            |    93 B | Non-executable structured document            | **LOW**       |
+| `strings_test.txt`           |   213 B | Predictable readable strings & URL extraction | **LOW**       |
+| `high_entropy_test.bin`      | 4,096 B | High Shannon entropy test (~7.96)             | **HIGH**      |
+| `fake_pe_signature_test.bin` |   512 B | `MZ` file signature & graceful PE parser test | **LOW**       |
 
 ## 🌿 Git & GitHub Workflow
 
