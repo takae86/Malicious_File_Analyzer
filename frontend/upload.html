@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload &amp; Analyze Files — Tactical Forensic Console</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="brand-icon-wrap">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <span>Malicious File Analyzer</span>
+                <span class="brand-tag">WAYNE_SEC</span>
+            </div>
+            <div class="navbar-links">
+                <a href="index.html"><i class="fa-solid fa-terminal"></i> Dashboard</a>
+                <a href="upload.html" class="active"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
+                <a href="results.html"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+            </div>
+            <div class="navbar-status">
+                <span class="status-indicator"></span>
+                <span>ENGINE // ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="section-header">
+            <div>
+                <div class="tactical-tag" style="margin-bottom: 0.25rem;">INGESTION PIPELINE // STATIC DISK PARSER</div>
+                <h1 class="section-title">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>Suspicious File Ingestion</span>
+                </h1>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.35rem;">
+                    Deploy static triage protocols across suspicious binaries and documents without execution.
+                </p>
+            </div>
+            <div class="risk-disclaimer">
+                <i class="fa-solid fa-lock"></i>
+                <span>Isolated Non-Execution Environment</span>
+            </div>
+        </div>
+
+        <div class="upload-wrapper">
+            <!-- Drag and Drop Zone -->
+            <div class="dropzone" id="dropzone">
+                <input type="file" id="file-input" multiple style="display: none;" />
+                <div class="dropzone-icon-wrap">
+                    <i class="fa-solid fa-crosshairs"></i>
+                </div>
+                <div class="dropzone-title">Drop suspicious files or binaries here</div>
+                <div class="dropzone-subtitle">or select directly from your local filesystem for inspection</div>
+                <div style="margin-bottom: 1.35rem;">
+                    <button type="button" class="btn btn-secondary" id="browse-btn">
+                        <i class="fa-solid fa-folder-open"></i> Browse Files
+                    </button>
+                </div>
+                <div class="dropzone-formats">
+                    <i class="fa-solid fa-circle-nodes"></i>
+                    <span>Supports EXEs, DLLs, PDFs, ZIPs, Docs, Scripts &amp; Raw Binaries (Max 50MB per file)</span>
+                </div>
+            </div>
+
+            <!-- Selected Files Queue Section -->
+            <div class="queue-container" id="queue-section" style="display: none;">
+                <div class="queue-header">
+                    <div>
+                        <strong style="color: var(--text-primary); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono);">
+                            Target Queue
+                        </strong>
+                        <span class="queue-count" id="queue-count" style="margin-left: 0.85rem;">0 files ready</span>
+                    </div>
+                    <button type="button" class="btn btn-ghost btn-sm" id="clear-queue-btn">
+                        <i class="fa-solid fa-trash-can"></i> Clear Queue
+                    </button>
+                </div>
+
+                <!-- Queue Items List -->
+                <div class="queue-list" id="queue-list"></div>
+
+                <!-- Action Footer -->
+                <div class="queue-actions-footer">
+                    <button type="button" class="btn btn-primary btn-lg" id="start-analysis-btn">
+                        <i class="fa-solid fa-play"></i> Initiate Forensic Analysis
+                    </button>
+                </div>
+            </div>
+
+            <!-- Educational Notice Card -->
+            <div class="card" style="border-left: 3px solid var(--accent-gold); background: rgba(13, 17, 23, 0.7);">
+                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--accent-gold); font-size: 1.25rem; margin-top: 0.2rem;"></i>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--text-primary);">Forensic Analysis Directive:</strong>
+                        This system performs passive static inspection (signature detection, MD5/SHA-256 hashing, Shannon entropy, PE structural parsing, and heuristic rules).
+                        Risk classifications (LOW, MEDIUM, HIGH) are indicator guidelines and must not be used as standalone proof of maliciousness or absolute safety.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Batcomputer Forensic Scanning Modal -->
+    <div class="scanning-overlay" id="scanning-overlay">
+        <div class="scanning-modal">
+            <div class="scanning-radar">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="scanning-title">Forensic Engine Active</div>
+            <div class="scanning-target" id="scanning-target">sample.exe</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Executing static analysis pipeline...
+            </div>
+
+            <!-- Progress Steps List -->
+            <div class="scan-steps">
+                <div class="scan-step pending" data-label="File validation &amp; integrity checks">
+                    <i class="fa-regular fa-circle"></i> File validation &amp; integrity checks
+                </div>
+                <div class="scan-step pending" data-label="Signature &amp; magic byte inspection">
+                    <i class="fa-regular fa-circle"></i> Signature &amp; magic byte inspection
+                </div>
+                <div class="scan-step pending" data-label="Cryptographic hashing (MD5 / SHA-256)">
+                    <i class="fa-regular fa-circle"></i> Cryptographic hashing (MD5 / SHA-256)
+                </div>
+                <div class="scan-step pending" data-label="Shannon entropy computation (0 - 8)">
+                    <i class="fa-regular fa-circle"></i> Shannon entropy computation (0 - 8)
+                </div>
+                <div class="scan-step pending" data-label="Printable strings extraction">
+                    <i class="fa-regular fa-circle"></i> Printable strings extraction
+                </div>
+                <div class="scan-step pending" data-label="Windows PE header &amp; section analysis">
+                    <i class="fa-regular fa-circle"></i> Windows PE header &amp; section analysis
+                </div>
+                <div class="scan-step pending" data-label="Heuristic risk engine evaluation">
+                    <i class="fa-regular fa-circle"></i> Heuristic risk engine evaluation
+                </div>
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                TRANSMITTING TO FASTAPI CORE...
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+                <span>FASTAPI BACKEND</span>
+                <span>•</span>
+                <span>VANILLA JS CONSOLE</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+</html>
