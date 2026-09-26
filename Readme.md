@@ -8,6 +8,9 @@ Users can upload multiple files and view static-analysis results including file 
 
 > **Safety:** This project performs static analysis only. It does not intentionally execute uploaded files and is not a replacement for professional antivirus software or dynamic sandboxing.
 
+<img width="1917" height="1078" alt="image" src="https://github.com/user-attachments/assets/29e97806-f001-4cee-b13c-b016b662b9f4" />
+
+
 ## ✨ Main Features
 
 - 📤 Multi-file upload
