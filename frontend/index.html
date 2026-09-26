@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malicious File Analyzer — Tactical Forensic Command Center</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="brand-icon-wrap">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <span>Malicious File Analyzer</span>
+                <span class="brand-tag">WAYNE_SEC</span>
+            </div>
+            <div class="navbar-links">
+                <a href="index.html" class="active"><i class="fa-solid fa-terminal"></i> Dashboard</a>
+                <a href="upload.html"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
+                <a href="results.html"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+            </div>
+            <div class="navbar-status">
+                <span class="status-indicator"></span>
+                <span>ENGINE // ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Hero Section (Tactical Command Center) -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="tactical-tag" style="margin-bottom: 0.65rem; color: var(--accent-gold);">
+                        <i class="fa-solid fa-crosshairs"></i> FORENSIC STATIC ANALYSIS // GOTHAM SECTOR 04
+                    </div>
+                    <h1>Analyze Suspicious Files. Understand the Risk.</h1>
+                    <p class="hero-subtitle">
+                        Tactical passive static file inspection and binary forensics engineered for high-threat triage without code execution.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="upload.html" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-shield-virus"></i> Analyze a File
+                        </a>
+                        <a href="results.html" class="btn btn-secondary btn-lg">
+                            <i class="fa-solid fa-database"></i> View Reports
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="security-grid">
+                        <div class="scan-line"></div>
+                        <div class="grid-file-badge">
+                            <i class="fa-solid fa-fingerprint"></i>
+                            <div>
+                                <div style="font-weight: 700; letter-spacing: 0.02em;">BATCOMPUTER FORENSICS</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">SIGNATURE &amp; ENTROPY SUITE</div>
+                            </div>
+                        </div>
+                        <div class="grid-metrics">
+                            <div>SYS: <span>ACTIVE</span></div>
+                            <div>HEURISTICS: <span>ARMED</span></div>
+                            <div>RADAR: <span>360°</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Metric Cards -->
+        <section class="summary-cards">
+            <div class="card" id="card-total">
+                <div class="card-header">
+                    <i class="fa-solid fa-folder-tree"></i>
+                    <span>Files Analyzed</span>
+                </div>
+                <div class="card-value">0</div>
+                <div class="card-trend">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Total sessions recorded</span>
+                </div>
+            </div>
+            <div class="card card-high" id="card-high">
+                <div class="card-header">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--risk-high);"></i>
+                    <span>High Risk</span>
+                </div>
+                <div class="card-value">0</div>
+                <div class="card-trend">
+                    <i class="fa-solid fa-circle-exclamation" style="color: var(--risk-high);"></i>
+                    <span>Elevated heuristic alerts</span>
+                </div>
+            </div>
+            <div class="card card-med" id="card-med">
+                <div class="card-header">
+                    <i class="fa-solid fa-circle-exclamation" style="color: var(--risk-med);"></i>
+                    <span>Medium Risk</span>
+                </div>
+                <div class="card-value">0</div>
+                <div class="card-trend">
+                    <i class="fa-solid fa-bolt" style="color: var(--risk-med);"></i>
+                    <span>Suspicious patterns</span>
+                </div>
+            </div>
+            <div class="card card-low" id="card-low">
+                <div class="card-header">
+                    <i class="fa-solid fa-circle-check" style="color: var(--risk-low);"></i>
+                    <span>Low Risk</span>
+                </div>
+                <div class="card-value">0</div>
+                <div class="card-trend">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--risk-low);"></i>
+                    <span>Standard signatures</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Analyses Table Section -->
+        <section class="recent-analyses">
+            <div class="section-header">
+                <div>
+                    <div class="tactical-tag" style="margin-bottom: 0.25rem;">INCIDENT LOG // ACTIVE SAMPLES</div>
+                    <div class="section-title">
+                        <i class="fa-solid fa-table-list"></i>
+                        <span>Recent Static Analyses</span>
+                    </div>
+                </div>
+                <div class="risk-disclaimer">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Risk levels are heuristic indicators for further investigation, not definitive malware verdicts.</span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>File Type</th>
+                            <th>Entropy</th>
+                            <th>Risk</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-analyses-body">
+                        <tr class="empty-state">
+                            <td colspan="6">
+                                <i class="fa-regular fa-folder-open"></i>
+                                No analyses yet. Upload a file to begin static triage.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+                <span>FASTAPI BACKEND</span>
+                <span>•</span>
+                <span>VANILLA JS CONSOLE</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>
