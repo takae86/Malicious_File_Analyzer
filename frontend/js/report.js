@@ -12,6 +12,54 @@
  * 7. Risk Assessment & Educational Disclaimer
  */
 
+/**
+ * Normalizes backend responses from either /api/analysis/:id/report (nested)
+ * or /api/analysis/:id (flat) or local cache into a unified report data model.
+ */
+function normalizeReportData(raw) {
+    if (!raw || typeof raw !== "object") return null;
+
+    const target = raw.target || {};
+    const securitySummary = raw.securitySummary || {};
+    const technicalDetails = raw.technicalDetails || {};
+
+    const fileName = target.fileName || raw.fileName || "Unknown File";
+    const fileSize = target.fileSize !== undefined ? target.fileSize : (raw.fileSize !== undefined ? raw.fileSize : 0);
+    const fileType = target.fileType || raw.fileType || "Generic Binary";
+    const signature = target.signature || raw.signature || "Unknown / Not Detected";
+    const md5 = target.md5 || raw.md5 || "N/A";
+    const sha256 = target.sha256 || raw.sha256 || "N/A";
+
+    const risk = (securitySummary.risk || raw.risk || "LOW").toUpperCase();
+    const entropy = securitySummary.entropy !== undefined ? securitySummary.entropy : (raw.entropy !== undefined ? raw.entropy : 0);
+    const indicators = securitySummary.indicators || raw.indicators || [];
+
+    const strings = technicalDetails.extractedStringsSample || raw.strings || [];
+    const pe = technicalDetails.pe || raw.pe || {};
+
+    const id = raw.reportId || raw.analysisId || raw.id || target.analysisId || "N/A";
+    const timestamp = raw.generatedAt || raw.timestamp || new Date().toISOString();
+
+    return {
+        id,
+        reportId: raw.reportId || id,
+        analysisId: raw.analysisId || id,
+        fileName,
+        fileSize,
+        fileType,
+        signature,
+        md5,
+        sha256,
+        risk,
+        entropy,
+        indicators,
+        strings,
+        pe,
+        timestamp,
+        disclaimer: raw.disclaimer || ""
+    };
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const reportId = urlParams.get("id");
@@ -20,39 +68,64 @@ document.addEventListener("DOMContentLoaded", async () => {
     const contentEl = document.getElementById("report-content");
     const errorEl = document.getElementById("report-error");
 
-    let reportData = null;
+    let rawData = null;
 
     if (reportId) {
         // Fetch via fixed API endpoint: GET /api/analysis/:id/report
         const res = await API.getAnalysisReport(reportId);
         if (res && res.success && res.data) {
-            reportData = res.data;
+            rawData = res.data;
         } else {
             // Try fetching basic analysis endpoint: GET /api/analysis/:id
             const basicRes = await API.getAnalysis(reportId);
             if (basicRes && basicRes.success && basicRes.data) {
-                reportData = basicRes.data;
+                rawData = basicRes.data;
             }
         }
     }
 
     // If still null, check active session item
-    if (!reportData) {
-        reportData = API.getActiveSessionAnalysis();
+    if (!rawData) {
+        rawData = API.getActiveSessionAnalysis();
     }
 
     // If still null, try first cached analysis
-    if (!reportData) {
+    if (!rawData) {
         const cached = API.getCachedAnalyses();
         if (cached.length > 0) {
-            reportData = cached[0];
+            rawData = cached[0];
+        }
+    }
+
+    // If still null, fetch latest analysis from backend API
+    if (!rawData) {
+        try {
+            const allRes = await API.getAnalyses();
+            if (allRes && allRes.success && Array.isArray(allRes.data) && allRes.data.length > 0) {
+                rawData = allRes.data[0];
+                if (rawData && rawData.analysisId) {
+                    // Update URL silently so refresh keeps the file
+                    const newUrl = `${window.location.pathname}?id=${encodeURIComponent(rawData.analysisId)}`;
+                    window.history.replaceState({}, "", newUrl);
+                }
+            }
+        } catch (e) {
+            console.warn("Unable to fetch fallback analyses from API:", e);
         }
     }
 
     if (loadingEl) loadingEl.style.display = "none";
 
-    if (!reportData) {
-        if (errorEl) errorEl.style.display = "block";
+    const reportData = normalizeReportData(rawData);
+
+    if (!reportData || (reportData.fileName === "Unknown File" && reportData.fileSize === 0 && reportData.id === "N/A")) {
+        if (errorEl) {
+            errorEl.style.display = "block";
+            const titleEl = errorEl.querySelector("h2");
+            const pEl = errorEl.querySelector("p");
+            if (titleEl) titleEl.textContent = "No Report Selected";
+            if (pEl) pEl.textContent = "You haven't selected a file report yet. Please choose a file from your Scan History or upload a new file to inspect it.";
+        }
         return;
     }
 
@@ -104,13 +177,63 @@ function renderHeader(data) {
 
     if (riskVerdict) {
         if (risk === "HIGH") {
-            riskVerdict.textContent = "High Risk Indicator — Suspicious markers detected. Recommend isolated sandbox inspection.";
+            riskVerdict.textContent = "High Risk — Dangerous indicators detected! We strongly advise that you do NOT open or run this file on your personal computer.";
         } else if (risk === "MEDIUM") {
-            riskVerdict.textContent = "Medium Risk Indicator — Anomalies or packer-like characteristics observed.";
+            riskVerdict.textContent = "Medium Risk (Suspicious) — Unusual structures or code scrambling observed. Proceed with caution.";
         } else {
-            riskVerdict.textContent = "Low Risk Indicator — Standard static signatures match expected structure.";
+            riskVerdict.textContent = "Low Risk (Normal) — File appears clean and matches standard expected format.";
         }
     }
+}
+
+/**
+ * Friendly translation for technical security indicators
+ */
+function getFriendlyIndicator(title, desc) {
+    const t = (title || "").toLowerCase();
+    if (t.includes("double extension") || t.includes("rlo")) {
+        return {
+            title: "Deceptive Double Extension (e.g. .pdf.exe)",
+            desc: desc || "The file uses a sneaky double extension trick to hide that it is an executable program."
+        };
+    }
+    if (t.includes("mismatch")) {
+        return {
+            title: "Disguised File Type (Fake Extension)",
+            desc: desc || "The file extension does not match what is really inside the file."
+        };
+    }
+    if (t.includes("high entropy") || t.includes("entropy")) {
+        return {
+            title: "Heavily Scrambled Code (High Entropy)",
+            desc: desc || "Sections of this file are scrambled, encrypted, or compressed, which malware often uses to hide its true code."
+        };
+    }
+    if (t.includes("powershell") || t.includes("command")) {
+        return {
+            title: "Suspicious System Commands",
+            desc: desc || "Contains commands that attempt to run hidden scripts or modify system settings."
+        };
+    }
+    if (t.includes("shadow copy") || t.includes("ransomware")) {
+        return {
+            title: "Backup Deletion Command (Ransomware Sign)",
+            desc: desc || "Attempts to delete Windows shadow copies to prevent restoring files."
+        };
+    }
+    if (t.includes("credential") || t.includes("dumping") || t.includes("mimikatz")) {
+        return {
+            title: "Password / Credential Stealing Marker",
+            desc: desc || "References known password theft and memory scraping tools."
+        };
+    }
+    if (t.includes("import")) {
+        return {
+            title: "Sensitive Operating System Functions",
+            desc: desc || "The program requests deep Windows permissions often used by malware for memory injection or stealth."
+        };
+    }
+    return { title: title || "Security Alert", desc: desc || "Flagged by static analysis safety checks." };
 }
 
 /**
@@ -145,10 +268,11 @@ function renderFileInformation(data) {
         if (mismatch) {
             warningBox.style.display = "flex";
             warningBox.innerHTML = `
-                <i class="fa-solid fa-triangle-exclamation" style="color: var(--risk-high); font-size: 1.25rem;"></i>
+                <i class="fa-solid fa-triangle-exclamation" style="color: var(--risk-high); font-size: 1.35rem;"></i>
                 <div>
-                    <strong style="color: #fca5a5;">Signature Mismatch Warning:</strong> 
-                    File extension (.${fileName.split(".").pop()}) does not match detected binary signature (${data.fileType || data.signature}).
+                    <strong style="color: #fca5a5;">⚠️ Disguised File Warning (Fake Extension):</strong> 
+                    This file is named with <code>.${escapeHtml(fileName.split(".").pop())}</code>, but inside it is actually a <strong>${escapeHtml(data.fileType || data.signature)}</strong>! 
+                    Attackers often rename dangerous programs to look like harmless documents to trick people into opening them.
                 </div>
             `;
         } else {
@@ -186,11 +310,11 @@ function renderEntropy(data) {
 
     if (descEl) {
         if (raw >= 7.2) {
-            descEl.innerHTML = `<strong style="color: var(--risk-high);">High Entropy (${raw.toFixed(2)}):</strong> Indicates high randomness, commonly associated with packed binaries, encrypted payloads, or compressed archives.`;
+            descEl.innerHTML = `<strong style="color: var(--risk-high);">High Scrambling (${raw.toFixed(2)} / 8.0):</strong> The file data is heavily randomized. This commonly indicates packed code, encrypted payloads, or hidden malware trying to avoid detection.`;
         } else if (raw >= 5.5) {
-            descEl.innerHTML = `<strong style="color: var(--risk-med);">Moderate Entropy (${raw.toFixed(2)}):</strong> Typical of compiled native binaries with mixed code and data sections.`;
+            descEl.innerHTML = `<strong style="color: var(--risk-med);">Moderate Scrambling (${raw.toFixed(2)} / 8.0):</strong> Normal for compiled applications containing a mix of code and program resources.`;
         } else {
-            descEl.innerHTML = `<strong style="color: var(--risk-low);">Low Entropy (${raw.toFixed(2)}):</strong> Indicates structured plain text, uncompressed source code, or predictable byte distributions.`;
+            descEl.innerHTML = `<strong style="color: var(--risk-low);">Low Scrambling (${raw.toFixed(2)} / 8.0):</strong> The file data is organized and readable, typical of plain text, standard documents, or uncompressed source files.`;
         }
     }
 }
@@ -209,24 +333,26 @@ function renderIndicators(data) {
         container.innerHTML = `
             <div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">
                 <i class="fa-solid fa-circle-check" style="color: var(--risk-low); margin-right: 0.5rem;"></i>
-                No suspicious heuristic indicators triggered for this sample.
+                No suspicious security indicators found. The file appears ordinary and clean.
             </div>
         `;
         return;
     }
 
     indicators.forEach(ind => {
-        let title = typeof ind === "string" ? ind : (ind.title || ind.indicator || "Suspicious Flag");
-        let desc = ind.description || "Flagged by static analysis heuristic rule.";
+        let rawTitle = typeof ind === "string" ? ind : (ind.title || ind.indicator || "Suspicious Flag");
+        let rawDesc = ind.description || "Flagged by static analysis safety checks.";
         let sev = (ind.severity || "medium").toLowerCase();
+
+        const friendly = getFriendlyIndicator(rawTitle, rawDesc);
 
         const item = document.createElement("div");
         item.className = `indicator-card ${sev}`;
         item.innerHTML = `
-            <i class="fa-solid fa-shield-virus indicator-icon"></i>
+            <i class="fa-solid fa-triangle-exclamation indicator-icon"></i>
             <div>
-                <div class="indicator-title">${escapeHtml(title)}</div>
-                <div class="indicator-desc">${escapeHtml(desc)}</div>
+                <div class="indicator-title">${escapeHtml(friendly.title)}</div>
+                <div class="indicator-desc">${escapeHtml(friendly.desc)}</div>
             </div>
         `;
         container.appendChild(item);
@@ -241,12 +367,13 @@ function renderPEData(data) {
     if (!container) return;
 
     const pe = data.pe;
-    if (!pe || (typeof pe === "object" && Object.keys(pe).length === 0)) {
+    if (!pe || (typeof pe === "object" && Object.keys(pe).length === 0) || pe.isPE === false || pe.is_pe === false) {
+        const msg = (pe && (pe.message || pe.status)) ? pe.message : "This file is not a Windows executable (.exe, .dll, .sys).";
         container.innerHTML = `
             <div class="pe-unavailable">
                 <i class="fa-regular fa-file-code"></i>
-                <p>PE analysis is not available for this file type.</p>
-                <small style="color: var(--text-muted);">Only valid Windows Portable Executable files (.exe, .dll, .sys) support PE header parsing.</small>
+                <p>${escapeHtml(msg)}</p>
+                <small style="color: var(--text-muted);">Windows executable (PE) analysis only applies to valid, complete Windows executable binaries.</small>
             </div>
         `;
         return;

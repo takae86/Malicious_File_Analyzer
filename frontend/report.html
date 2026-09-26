@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Static Analysis Report — Tactical Forensic Dossier</title>
+    <title>File Safety Report — Malicious File Analyzer</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,16 +22,16 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <span>Malicious File Analyzer</span>
-                <span class="brand-tag">WAYNE_SEC</span>
+                <span class="brand-tag">SAFE SCANNER</span>
             </div>
             <div class="navbar-links">
-                <a href="index.html"><i class="fa-solid fa-terminal"></i> Dashboard</a>
-                <a href="upload.html"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
-                <a href="results.html" class="active"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+                <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i> Scan a File</a>
+                <a href="results.html" class="active"><i class="fa-solid fa-clock-rotate-left"></i> Scan History</a>
             </div>
             <div class="navbar-status">
                 <span class="status-indicator"></span>
-                <span>ENGINE // ONLINE</span>
+                <span>SYSTEM // READY</span>
             </div>
         </div>
     </nav>
@@ -42,10 +42,10 @@
         <div id="report-loading" style="text-align: center; padding: 5.5rem 1rem;">
             <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
             <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.02em;">
-                Retrieving Forensic Dossier...
+                Loading Safety Report...
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem; font-family: var(--font-mono);">
-                INTERROGATING FASTAPI ANALYSIS ENGINE
+                RETRIEVING INSPECTION RESULTS
             </div>
         </div>
 
@@ -53,17 +53,17 @@
         <div id="report-error" class="card" style="display: none; text-align: center; padding: 4.5rem 2rem; margin-bottom: 2rem;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: var(--risk-high); margin-bottom: 1.25rem;"></i>
             <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 800;">
-                Report Dossier Unavailable
+                Report Not Found
             </h2>
             <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">
-                Unable to locate or retrieve this static analysis report. The report ID may be invalid or the backend server is unreachable.
+                Unable to locate this safety report. The file may not have been scanned yet, or the report ID is invalid.
             </p>
             <div style="display: flex; justify-content: center; gap: 1rem;">
                 <a href="results.html" class="btn btn-secondary">
-                    <i class="fa-solid fa-arrow-left"></i> Back to Archive
+                    <i class="fa-solid fa-arrow-left"></i> View All Scans
                 </a>
                 <a href="upload.html" class="btn btn-primary">
-                    <i class="fa-solid fa-shield-virus"></i> Ingest New Sample
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Scan a File Now
                 </a>
             </div>
         </div>
@@ -75,21 +75,21 @@
                 <div>
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem;">
                         <span class="badge-risk badge-risk-low" id="rep-risk-badge">LOW</span>
-                        <span class="tactical-tag">CLASSIFIED // STATIC DOSSIER</span>
+                        <span class="tactical-tag">FILE SAFETY REPORT</span>
                     </div>
                     <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.01em;" id="rep-filename">
                         sample.exe
                     </h1>
                     <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: var(--font-mono);">
-                        <span><strong>DOSSIER ID:</strong> <span id="rep-id" style="color: var(--accent-gold);">N/A</span></span>
-                        <span><strong>TIMESTAMP:</strong> <span id="rep-time">N/A</span></span>
-                        <span><strong>ENGINE:</strong> STATIC_PARSER_V2</span>
+                        <span><strong>REPORT ID:</strong> <span id="rep-id" style="color: var(--accent-gold);">N/A</span></span>
+                        <span><strong>SCANNED ON:</strong> <span id="rep-time">N/A</span></span>
+                        <span><strong>METHOD:</strong> SAFE_STATIC_INSPECTION</span>
                     </div>
                 </div>
 
                 <div style="display: flex; gap: 0.75rem; align-items: center;">
                     <button type="button" class="btn btn-secondary btn-sm" id="print-report-btn">
-                        <i class="fa-solid fa-print"></i> Print / Export
+                        <i class="fa-solid fa-print"></i> Print / Save PDF
                     </button>
                     <a href="results.html" class="btn btn-secondary btn-sm">
                         <i class="fa-solid fa-arrow-left"></i> All Reports
@@ -97,20 +97,28 @@
                 </div>
             </div>
 
-            <!-- Risk Disclaimer Banner -->
-            <div class="card" style="border-left: 4px solid var(--accent-gold); background: rgba(13, 17, 23, 0.75); margin-bottom: 2rem; padding: 1.1rem 1.35rem;">
+            <!-- Risk Verdict Banner -->
+            <div class="card" style="border-left: 4px solid var(--accent-gold); background: rgba(13, 17, 23, 0.75); margin-bottom: 1.5rem; padding: 1.1rem 1.35rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                     <div style="display: flex; align-items: center; gap: 0.85rem;">
                         <i class="fa-solid fa-shield-halved" style="color: var(--accent-gold); font-size: 1.35rem;"></i>
                         <div>
-                            <div style="font-weight: 700; font-size: 0.92rem;" id="rep-risk-verdict">
-                                Low Risk Indicator — Standard static signatures match expected structure.
+                            <div style="font-weight: 700; font-size: 0.95rem;" id="rep-risk-verdict">
+                                Low Risk — Standard file signatures match expected structure.
                             </div>
-                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
-                                Risk levels are heuristic indicators for further investigation, not definitive malware verdicts.
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;">
+                                Risk scores are heuristic indicators to guide your safety decisions without executing code.
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Plain English Explainer Box -->
+            <div class="plain-english-box">
+                <i class="fa-regular fa-lightbulb"></i>
+                <div>
+                    <strong>How to read this report:</strong> We inspected 6 safety areas below. If a file is disguised (like a virus pretending to be a PDF), has scrambled code (often used by packers to hide malware), or contains risky web links, it will be flagged clearly.
                 </div>
             </div>
 
@@ -128,12 +136,12 @@
                         <div class="report-section-header">
                             <div class="report-section-title">
                                 <i class="fa-solid fa-circle-info"></i>
-                                <span>1. File Identification &amp; Signature</span>
+                                <span>1. File Identity &amp; Format</span>
                             </div>
                         </div>
                         <div class="kv-grid">
                             <div class="kv-item">
-                                <span class="kv-label">Filename</span>
+                                <span class="kv-label">File Name</span>
                                 <span class="kv-value" id="rep-info-name">N/A</span>
                             </div>
                             <div class="kv-item">
@@ -141,11 +149,11 @@
                                 <span class="kv-value" id="rep-info-size">N/A</span>
                             </div>
                             <div class="kv-item">
-                                <span class="kv-label">Detected MIME / Type</span>
+                                <span class="kv-label">Detected True Type</span>
                                 <span class="kv-value" id="rep-info-type">N/A</span>
                             </div>
                             <div class="kv-item">
-                                <span class="kv-label">Signature / Magic Bytes</span>
+                                <span class="kv-label">Internal Badge (Magic Bytes)</span>
                                 <span class="kv-value mono" id="rep-info-sig">N/A</span>
                             </div>
                         </div>
@@ -156,7 +164,7 @@
                         <div class="report-section-header">
                             <div class="report-section-title">
                                 <i class="fa-solid fa-chart-simple"></i>
-                                <span>2. Shannon Entropy Measurement</span>
+                                <span>2. Code Scrambling / Entropy Meter</span>
                             </div>
                             <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: var(--accent-gold);">
                                 <span id="rep-entropy-score">0.00</span> / 8.00
@@ -167,9 +175,9 @@
                                 <div class="entropy-fill" id="rep-entropy-fill" style="width: 0%;"></div>
                             </div>
                             <div class="entropy-legend">
-                                <span>0.00 (Structured / Plain Text)</span>
-                                <span>4.00 (Mixed Byte Space)</span>
-                                <span>8.00 (Encrypted / Compressed)</span>
+                                <span>0.00 (Readable Plain Text)</span>
+                                <span>4.00 (Normal Program / Data)</span>
+                                <span>8.00 (Scrambled / Encrypted)</span>
                             </div>
                             <p class="entropy-desc" id="rep-entropy-desc">
                                 Calculating entropy distribution...
@@ -182,7 +190,7 @@
                         <div class="report-section-header">
                             <div class="report-section-title">
                                 <i class="fa-brands fa-windows"></i>
-                                <span>3. Windows Portable Executable (PE) Analysis</span>
+                                <span>3. Windows Executable Details (PE)</span>
                             </div>
                         </div>
                         <div id="rep-pe-container">
@@ -194,24 +202,24 @@
                     <section class="report-section">
                         <div class="report-section-header">
                             <div class="report-section-title">
-                                <i class="fa-solid fa-terminal"></i>
-                                <span>4. Extracted Readable Strings</span>
+                                <i class="fa-solid fa-font"></i>
+                                <span>4. Readable Text &amp; Web Links</span>
                             </div>
-                            <span class="strings-count-badge" id="rep-strings-count">0 strings</span>
+                            <span class="strings-count-badge" id="rep-strings-count">0 text items</span>
                         </div>
                         
                         <div class="strings-toolbar">
                             <div class="search-input-wrap" style="flex: 1;">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" id="rep-strings-search" class="search-input" placeholder="Filter strings (e.g. http, cmd, .dll, registry)..." />
+                                <input type="text" id="rep-strings-search" class="search-input" placeholder="Search text (e.g. http, cmd, .dll, user, key)..." />
                             </div>
-                            <button type="button" class="btn btn-secondary btn-sm" id="rep-copy-strings-btn" title="Copy all extracted strings">
+                            <button type="button" class="btn btn-secondary btn-sm" id="rep-copy-strings-btn" title="Copy all extracted text">
                                 <i class="fa-regular fa-copy"></i> Copy All
                             </button>
                         </div>
 
                         <div class="strings-container" id="rep-strings-content">
-                            Loading extracted strings...
+                            Loading extracted text...
                         </div>
                     </section>
                 </div>
@@ -223,7 +231,14 @@
                         <div class="report-section-header">
                             <div class="report-section-title">
                                 <i class="fa-solid fa-fingerprint"></i>
-                                <span>5. Cryptographic Fingerprints</span>
+                                <span>5. Digital Fingerprints (Hashes)</span>
+                            </div>
+                        </div>
+
+                        <div class="plain-english-box" style="margin-bottom: 1rem;">
+                            <i class="fa-regular fa-lightbulb"></i>
+                            <div>
+                                <strong>Why this matters:</strong> Hashes act like unique serial numbers. You can copy the SHA-256 hash below and search it on <em>VirusTotal.com</em> to see if other antivirus tools recognize it.
                             </div>
                         </div>
 
@@ -253,7 +268,7 @@
                         <div class="report-section-header">
                             <div class="report-section-title">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                <span>6. Heuristic Indicators</span>
+                                <span>6. Security Findings &amp; Alerts</span>
                             </div>
                         </div>
                         <div id="rep-indicators-container" class="indicator-list">
@@ -265,17 +280,19 @@
                     <section class="report-section" style="background: rgba(13, 17, 23, 0.65);">
                         <div class="report-section-header">
                             <div class="report-section-title">
-                                <i class="fa-solid fa-vial"></i>
-                                <span>7. Safety &amp; Triage Guidance</span>
+                                <i class="fa-solid fa-list-check"></i>
+                                <span>7. Recommended Next Steps</span>
                             </div>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.65;">
                             <p style="margin-bottom: 0.75rem;">
-                                <strong>Static Analysis Scope:</strong> This dossier reflects passive byte-level parsing without code execution.
+                                <strong>If Low Risk:</strong> The file shows normal characteristics and no red flags. It is safe to use if it was sent by someone you trust.
+                            </p>
+                            <p style="margin-bottom: 0.75rem;">
+                                <strong>If Medium Risk:</strong> Be cautious. The file contains unusual structures or moderate code scrambling. Verify with the sender before opening.
                             </p>
                             <p>
-                                <strong>Next Steps for Suspicious Samples:</strong>
-                                If a file exhibits high entropy, double extensions, or abnormal PE section headers, quarantine and analyze it further inside an isolated virtual machine or dedicated sandboxed environment.
+                                <strong>If High Risk:</strong> Stop! Do not open or double-click this file on your regular computer. Delete it or inspect it only in an isolated virtual machine.
                             </p>
                         </div>
                     </section>
@@ -287,11 +304,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
-            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+            <div>&copy; 2026 Malicious File Analyzer. Designed for simple, safe, and transparent file inspection.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem;">
                 <span>FASTAPI BACKEND</span>
                 <span>•</span>
-                <span>VANILLA JS CONSOLE</span>
+                <span>SAFE STATIC ANALYSIS</span>
             </div>
         </div>
     </footer>

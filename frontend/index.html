@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malicious File Analyzer — Tactical Forensic Command Center</title>
+    <title>Malicious File Analyzer — Safe &amp; Simple File Security Checker</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,39 +22,39 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <span>Malicious File Analyzer</span>
-                <span class="brand-tag">WAYNE_SEC</span>
+                <span class="brand-tag">SAFE SCANNER</span>
             </div>
             <div class="navbar-links">
-                <a href="index.html" class="active"><i class="fa-solid fa-terminal"></i> Dashboard</a>
-                <a href="upload.html"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
-                <a href="results.html"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+                <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i> Scan a File</a>
+                <a href="results.html"><i class="fa-solid fa-clock-rotate-left"></i> Scan History</a>
             </div>
             <div class="navbar-status">
                 <span class="status-indicator"></span>
-                <span>ENGINE // ONLINE</span>
+                <span>SYSTEM // READY</span>
             </div>
         </div>
     </nav>
 
     <!-- Main Content Area -->
     <main class="main-content">
-        <!-- Hero Section (Tactical Command Center) -->
+        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-container">
                 <div class="hero-content">
                     <div class="tactical-tag" style="margin-bottom: 0.65rem; color: var(--accent-gold);">
-                        <i class="fa-solid fa-crosshairs"></i> FORENSIC STATIC ANALYSIS // GOTHAM SECTOR 04
+                        <i class="fa-solid fa-shield-halved"></i> 100% SAFE NON-EXECUTION SCANNER
                     </div>
-                    <h1>Analyze Suspicious Files. Understand the Risk.</h1>
+                    <h1>Is That File Safe? Check It Instantly.</h1>
                     <p class="hero-subtitle">
-                        Tactical passive static file inspection and binary forensics engineered for high-threat triage without code execution.
+                        Easily check any suspicious file, email attachment, or download. We look inside for hidden tricks, fake file extensions, and scrambled malware code — without ever opening or running the file on your device.
                     </p>
                     <div class="hero-cta">
                         <a href="upload.html" class="btn btn-primary btn-lg">
-                            <i class="fa-solid fa-shield-virus"></i> Analyze a File
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Scan a File Now
                         </a>
                         <a href="results.html" class="btn btn-secondary btn-lg">
-                            <i class="fa-solid fa-database"></i> View Reports
+                            <i class="fa-solid fa-clock-rotate-left"></i> View Previous Scans
                         </a>
                     </div>
                 </div>
@@ -62,44 +62,63 @@
                     <div class="security-grid">
                         <div class="scan-line"></div>
                         <div class="grid-file-badge">
-                            <i class="fa-solid fa-fingerprint"></i>
+                            <i class="fa-solid fa-shield-halved"></i>
                             <div>
-                                <div style="font-weight: 700; letter-spacing: 0.02em;">BATCOMPUTER FORENSICS</div>
-                                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">SIGNATURE &amp; ENTROPY SUITE</div>
+                                <div style="font-weight: 700; letter-spacing: 0.02em;">SAFE STATIC ANALYSIS</div>
+                                <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">ZERO RISK • NO CODE EXECUTION</div>
                             </div>
                         </div>
                         <div class="grid-metrics">
-                            <div>SYS: <span>ACTIVE</span></div>
-                            <div>HEURISTICS: <span>ARMED</span></div>
-                            <div>RADAR: <span>360°</span></div>
+                            <div>PROTECTION: <span>ACTIVE</span></div>
+                            <div>SAFETY CHECKS: <span>ARMED</span></div>
+                            <div>INSPECTION: <span>PASSIVE</span></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- 3-Step Simple How It Works Guide -->
+        <div class="user-guide-steps">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-title">Upload With Confidence</div>
+                <div class="step-desc">Select or drop any file you are unsure about. The file is never opened or executed on your machine, so it cannot harm you.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-title">Automated Inspection</div>
+                <div class="step-desc">The scanner checks if the file is pretending to be another type (e.g. an EXE disguised as a PDF), tests for scrambled code, and extracts text.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-title">Plain English Verdict</div>
+                <div class="step-desc">Get an easy-to-understand Low, Medium, or High Risk result along with clear advice on what you should do next.</div>
+            </div>
+        </div>
+
         <!-- Summary Metric Cards -->
         <section class="summary-cards">
             <div class="card" id="card-total">
                 <div class="card-header">
-                    <i class="fa-solid fa-folder-tree"></i>
-                    <span>Files Analyzed</span>
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Total Files Scanned</span>
                 </div>
                 <div class="card-value">0</div>
                 <div class="card-trend">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                    <span>Total sessions recorded</span>
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Files checked so far</span>
                 </div>
             </div>
             <div class="card card-high" id="card-high">
                 <div class="card-header">
                     <i class="fa-solid fa-triangle-exclamation" style="color: var(--risk-high);"></i>
-                    <span>High Risk</span>
+                    <span>High Risk Found</span>
                 </div>
                 <div class="card-value">0</div>
                 <div class="card-trend">
                     <i class="fa-solid fa-circle-exclamation" style="color: var(--risk-high);"></i>
-                    <span>Elevated heuristic alerts</span>
+                    <span>Files with serious warning signs</span>
                 </div>
             </div>
             <div class="card card-med" id="card-med">
@@ -109,19 +128,19 @@
                 </div>
                 <div class="card-value">0</div>
                 <div class="card-trend">
-                    <i class="fa-solid fa-bolt" style="color: var(--risk-med);"></i>
-                    <span>Suspicious patterns</span>
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--risk-med);"></i>
+                    <span>Files with suspicious traits</span>
                 </div>
             </div>
             <div class="card card-low" id="card-low">
                 <div class="card-header">
                     <i class="fa-solid fa-circle-check" style="color: var(--risk-low);"></i>
-                    <span>Low Risk</span>
+                    <span>Low Risk (Normal)</span>
                 </div>
                 <div class="card-value">0</div>
                 <div class="card-trend">
                     <i class="fa-solid fa-shield-halved" style="color: var(--risk-low);"></i>
-                    <span>Standard signatures</span>
+                    <span>Standard files with no red flags</span>
                 </div>
             </div>
         </section>
@@ -130,15 +149,15 @@
         <section class="recent-analyses">
             <div class="section-header">
                 <div>
-                    <div class="tactical-tag" style="margin-bottom: 0.25rem;">INCIDENT LOG // ACTIVE SAMPLES</div>
+                    <div class="tactical-tag" style="margin-bottom: 0.25rem;">SCAN LOG</div>
                     <div class="section-title">
-                        <i class="fa-solid fa-table-list"></i>
-                        <span>Recent Static Analyses</span>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Recent File Scans</span>
                     </div>
                 </div>
                 <div class="risk-disclaimer">
                     <i class="fa-solid fa-circle-info"></i>
-                    <span>Risk levels are heuristic indicators for further investigation, not definitive malware verdicts.</span>
+                    <span>Risk scores are helpful safety indicators to guide you, not a 100% definitive malware guarantee.</span>
                 </div>
             </div>
 
@@ -146,10 +165,10 @@
                 <table class="analysis-table">
                     <thead>
                         <tr>
-                            <th>Filename</th>
-                            <th>File Type</th>
-                            <th>Entropy</th>
-                            <th>Risk</th>
+                            <th>File Name</th>
+                            <th>Detected Type</th>
+                            <th>Scrambled Code (Entropy)</th>
+                            <th>Risk Level</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -158,7 +177,7 @@
                         <tr class="empty-state">
                             <td colspan="6">
                                 <i class="fa-regular fa-folder-open"></i>
-                                No analyses yet. Upload a file to begin static triage.
+                                No files scanned yet. Click "Scan a File Now" above to check your first file!
                             </td>
                         </tr>
                     </tbody>
@@ -170,11 +189,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
-            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+            <div>&copy; 2026 Malicious File Analyzer. Designed for simple, safe, and transparent file inspection.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem;">
                 <span>FASTAPI BACKEND</span>
                 <span>•</span>
-                <span>VANILLA JS CONSOLE</span>
+                <span>SAFE STATIC ANALYSIS</span>
             </div>
         </div>
     </footer>

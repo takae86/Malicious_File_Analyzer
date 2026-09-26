@@ -148,11 +148,36 @@ function renderResultsHeroAndPanels(data) {
     }
     if (riskSummary) {
         if (risk === "HIGH") {
-            riskSummary.textContent = "Multiple suspicious heuristic indicators and anomalous patterns detected.";
+            riskSummary.textContent = "High Risk: Dangerous indicators detected (such as disguised file extensions or heavily scrambled code).";
         } else if (risk === "MEDIUM") {
-            riskSummary.textContent = "Potential anomalies or unpacker-like entropy characteristics observed.";
+            riskSummary.textContent = "Medium Risk (Suspicious): Unusual structures or moderate code scrambling observed. Proceed with caution.";
         } else {
-            riskSummary.textContent = "Standard static characteristics observed. No elevated heuristic flags.";
+            riskSummary.textContent = "Low Risk (Normal): Standard file characteristics observed. No suspicious markers found.";
+        }
+    }
+
+    // Populate Plain-English Action Advice Card
+    const actionCard = document.getElementById("res-action-card");
+    const actionIcon = document.getElementById("res-action-icon");
+    const actionTitle = document.getElementById("res-action-title");
+    const actionDesc = document.getElementById("res-action-desc");
+
+    if (actionCard && actionDesc) {
+        if (risk === "HIGH") {
+            actionCard.className = "action-guidance-card danger";
+            if (actionIcon) actionIcon.style.color = "var(--risk-high)";
+            if (actionTitle) actionTitle.textContent = "Recommended Action: Do Not Open or Run";
+            actionDesc.textContent = "High danger signals detected (such as disguised extensions, heavily scrambled code, or dangerous commands). Do not execute or open this file on your regular computer. If needed for research, inspect only inside an isolated virtual machine or sandbox.";
+        } else if (risk === "MEDIUM") {
+            actionCard.className = "action-guidance-card warning";
+            if (actionIcon) actionIcon.style.color = "var(--risk-med)";
+            if (actionTitle) actionTitle.textContent = "Recommended Action: Exercise Caution";
+            actionDesc.textContent = "Unusual patterns or code scrambling were detected. Do not open this file unless you were expecting it from a trusted sender and have verified its origin.";
+        } else {
+            actionCard.className = "action-guidance-card safe";
+            if (actionIcon) actionIcon.style.color = "var(--risk-low)";
+            if (actionTitle) actionTitle.textContent = "Recommended Action: Standard Safe File";
+            actionDesc.textContent = "This file appears normal with ordinary structure and no deceptive extensions or suspicious indicators. Safe to open if received from a trusted source.";
         }
     }
 
@@ -191,6 +216,56 @@ function renderResultsHeroAndPanels(data) {
 }
 
 /**
+ * Friendly translation for technical security indicators
+ */
+function getFriendlyIndicator(title, desc) {
+    const t = (title || "").toLowerCase();
+    if (t.includes("double extension") || t.includes("rlo")) {
+        return {
+            title: "Deceptive Double Extension (e.g. .pdf.exe)",
+            desc: desc || "The file uses a sneaky double extension trick to hide that it is an executable program."
+        };
+    }
+    if (t.includes("mismatch")) {
+        return {
+            title: "Disguised File Type (Fake Extension)",
+            desc: desc || "The file extension does not match what is really inside the file."
+        };
+    }
+    if (t.includes("high entropy") || t.includes("entropy")) {
+        return {
+            title: "Heavily Scrambled Code (High Entropy)",
+            desc: desc || "Sections of this file are scrambled, encrypted, or compressed, which malware often uses to hide its true code."
+        };
+    }
+    if (t.includes("powershell") || t.includes("command")) {
+        return {
+            title: "Suspicious System Commands",
+            desc: desc || "Contains commands that attempt to run hidden scripts or modify system settings."
+        };
+    }
+    if (t.includes("shadow copy") || t.includes("ransomware")) {
+        return {
+            title: "Backup Deletion Command (Ransomware Sign)",
+            desc: desc || "Attempts to delete Windows shadow copies to prevent restoring files."
+        };
+    }
+    if (t.includes("credential") || t.includes("dumping") || t.includes("mimikatz")) {
+        return {
+            title: "Password / Credential Stealing Marker",
+            desc: desc || "References known password theft and memory scraping tools."
+        };
+    }
+    if (t.includes("import")) {
+        return {
+            title: "Sensitive Operating System Functions",
+            desc: desc || "The program requests deep Windows permissions often used by malware for memory injection or stealth."
+        };
+    }
+    return { title: title || "Security Alert", desc: desc || "Flagged by static analysis safety checks." };
+}
+
+/**
  * Renders the heuristic indicators list
  */
 function renderIndicatorsList(indicators) {
@@ -203,24 +278,26 @@ function renderIndicatorsList(indicators) {
         listEl.innerHTML = `
             <div style="color: var(--text-muted); font-size: 0.85rem; padding: 0.5rem 0;">
                 <i class="fa-solid fa-circle-check" style="color: var(--risk-low); margin-right: 0.5rem;"></i>
-                No suspicious heuristic indicators triggered.
+                No suspicious security indicators found. File looks clean and normal.
             </div>
         `;
         return;
     }
 
     indicators.forEach(ind => {
-        let title = typeof ind === "string" ? ind : (ind.title || ind.indicator || "Suspicious Flag");
-        let desc = ind.description || "";
+        let rawTitle = typeof ind === "string" ? ind : (ind.title || ind.indicator || "Suspicious Flag");
+        let rawDesc = ind.description || "";
         let sev = (ind.severity || "medium").toLowerCase();
+
+        const friendly = getFriendlyIndicator(rawTitle, rawDesc);
 
         const card = document.createElement("div");
         card.className = `indicator-card ${sev}`;
         card.innerHTML = `
             <i class="fa-solid fa-triangle-exclamation indicator-icon"></i>
             <div>
-                <div class="indicator-title">${escapeHtml(title)}</div>
-                ${desc ? `<div class="indicator-desc">${escapeHtml(desc)}</div>` : ""}
+                <div class="indicator-title">${escapeHtml(friendly.title)}</div>
+                ${friendly.desc ? `<div class="indicator-desc">${escapeHtml(friendly.desc)}</div>` : ""}
             </div>
         `;
         listEl.appendChild(card);
@@ -234,11 +311,13 @@ function renderPEPreview(pe) {
     const peContainer = document.getElementById("res-pe-container");
     if (!peContainer) return;
 
-    if (!pe || (typeof pe === "object" && Object.keys(pe).length === 0)) {
+    if (!pe || (typeof pe === "object" && Object.keys(pe).length === 0) || pe.isPE === false || pe.is_pe === false) {
+        const msg = (pe && (pe.message || pe.status)) ? pe.message : "PE analysis is not available for this file type.";
         peContainer.innerHTML = `
             <div class="pe-unavailable">
                 <i class="fa-regular fa-file-code"></i>
-                <p>PE analysis is not available for this file type.</p>
+                <p>${escapeHtml(msg)}</p>
+                <small style="color: var(--text-muted);">Windows executable (PE) analysis only applies to valid, complete Windows executable binaries.</small>
             </div>
         `;
         return;

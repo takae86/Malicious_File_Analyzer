@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload &amp; Analyze Files — Tactical Forensic Console</title>
+    <title>Upload &amp; Scan Files — Malicious File Analyzer</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,16 +22,16 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <span>Malicious File Analyzer</span>
-                <span class="brand-tag">WAYNE_SEC</span>
+                <span class="brand-tag">SAFE SCANNER</span>
             </div>
             <div class="navbar-links">
-                <a href="index.html"><i class="fa-solid fa-terminal"></i> Dashboard</a>
-                <a href="upload.html" class="active"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
-                <a href="results.html"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+                <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="upload.html" class="active"><i class="fa-solid fa-cloud-arrow-up"></i> Scan a File</a>
+                <a href="results.html"><i class="fa-solid fa-clock-rotate-left"></i> Scan History</a>
             </div>
             <div class="navbar-status">
                 <span class="status-indicator"></span>
-                <span>ENGINE // ONLINE</span>
+                <span>SYSTEM // READY</span>
             </div>
         </div>
     </nav>
@@ -40,38 +40,46 @@
     <main class="main-content">
         <div class="section-header">
             <div>
-                <div class="tactical-tag" style="margin-bottom: 0.25rem;">INGESTION PIPELINE // STATIC DISK PARSER</div>
+                <div class="tactical-tag" style="margin-bottom: 0.25rem;">FILE SAFETY SCAN</div>
                 <h1 class="section-title">
-                    <i class="fa-solid fa-microchip"></i>
-                    <span>Suspicious File Ingestion</span>
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Check Suspicious Files</span>
                 </h1>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.35rem;">
-                    Deploy static triage protocols across suspicious binaries and documents without execution.
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
+                    Upload any file to safely check what is inside. We analyze files without executing them, so your computer is always protected.
                 </p>
             </div>
             <div class="risk-disclaimer">
-                <i class="fa-solid fa-lock"></i>
-                <span>Isolated Non-Execution Environment</span>
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>100% Safe — Never Opened or Executed</span>
             </div>
         </div>
 
         <div class="upload-wrapper">
+            <!-- How it works helper box -->
+            <div class="plain-english-box">
+                <i class="fa-regular fa-lightbulb"></i>
+                <div>
+                    <strong>How this scan works:</strong> We read the file's raw contents like a book to detect disguised file extensions (like a program pretending to be a PDF), scrambled code, and suspicious web links. The file is never run on your computer.
+                </div>
+            </div>
+
             <!-- Drag and Drop Zone -->
             <div class="dropzone" id="dropzone">
                 <input type="file" id="file-input" multiple style="display: none;" />
                 <div class="dropzone-icon-wrap">
-                    <i class="fa-solid fa-crosshairs"></i>
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
                 </div>
-                <div class="dropzone-title">Drop suspicious files or binaries here</div>
-                <div class="dropzone-subtitle">or select directly from your local filesystem for inspection</div>
+                <div class="dropzone-title">Drag &amp; drop your file here</div>
+                <div class="dropzone-subtitle">or choose directly from your computer</div>
                 <div style="margin-bottom: 1.35rem;">
                     <button type="button" class="btn btn-secondary" id="browse-btn">
                         <i class="fa-solid fa-folder-open"></i> Browse Files
                     </button>
                 </div>
                 <div class="dropzone-formats">
-                    <i class="fa-solid fa-circle-nodes"></i>
-                    <span>Supports EXEs, DLLs, PDFs, ZIPs, Docs, Scripts &amp; Raw Binaries (Max 50MB per file)</span>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Supports all files: Programs (.exe, .dll), Documents (.pdf, .docx), Archives (.zip), Scripts, and text (Max 50MB)</span>
                 </div>
             </div>
 
@@ -80,12 +88,12 @@
                 <div class="queue-header">
                     <div>
                         <strong style="color: var(--text-primary); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono);">
-                            Target Queue
+                            Files Ready to Scan
                         </strong>
                         <span class="queue-count" id="queue-count" style="margin-left: 0.85rem;">0 files ready</span>
                     </div>
                     <button type="button" class="btn btn-ghost btn-sm" id="clear-queue-btn">
-                        <i class="fa-solid fa-trash-can"></i> Clear Queue
+                        <i class="fa-solid fa-trash-can"></i> Remove All
                     </button>
                 </div>
 
@@ -95,7 +103,7 @@
                 <!-- Action Footer -->
                 <div class="queue-actions-footer">
                     <button type="button" class="btn btn-primary btn-lg" id="start-analysis-btn">
-                        <i class="fa-solid fa-play"></i> Initiate Forensic Analysis
+                        <i class="fa-solid fa-play"></i> Start Safety Scan
                     </button>
                 </div>
             </div>
@@ -103,56 +111,56 @@
             <!-- Educational Notice Card -->
             <div class="card" style="border-left: 3px solid var(--accent-gold); background: rgba(13, 17, 23, 0.7);">
                 <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fa-solid fa-shield-halved" style="color: var(--accent-gold); font-size: 1.25rem; margin-top: 0.2rem;"></i>
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent-gold); font-size: 1.25rem; margin-top: 0.2rem;"></i>
                     <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
-                        <strong style="color: var(--text-primary);">Forensic Analysis Directive:</strong>
-                        This system performs passive static inspection (signature detection, MD5/SHA-256 hashing, Shannon entropy, PE structural parsing, and heuristic rules).
-                        Risk classifications (LOW, MEDIUM, HIGH) are indicator guidelines and must not be used as standalone proof of maliciousness or absolute safety.
+                        <strong style="color: var(--text-primary);">Understanding Your Results:</strong>
+                        This scanner inspects internal file identity, digital fingerprints (MD5 / SHA-256), code scrambling (entropy), and readable text.
+                        The risk ratings (LOW, MEDIUM, HIGH) give you practical safety guidance so you can make informed decisions before opening unknown files.
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Batcomputer Forensic Scanning Modal -->
+    <!-- Safe Scanning Progress Modal -->
     <div class="scanning-overlay" id="scanning-overlay">
         <div class="scanning-modal">
             <div class="scanning-radar">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
-            <div class="scanning-title">Forensic Engine Active</div>
+            <div class="scanning-title">Scanning File Safely...</div>
             <div class="scanning-target" id="scanning-target">sample.exe</div>
             <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                Executing static analysis pipeline...
+                Running passive static safety checks...
             </div>
 
             <!-- Progress Steps List -->
             <div class="scan-steps">
-                <div class="scan-step pending" data-label="File validation &amp; integrity checks">
-                    <i class="fa-regular fa-circle"></i> File validation &amp; integrity checks
+                <div class="scan-step pending" data-label="Checking file size &amp; structure">
+                    <i class="fa-regular fa-circle"></i> Checking file size &amp; structure
                 </div>
-                <div class="scan-step pending" data-label="Signature &amp; magic byte inspection">
-                    <i class="fa-regular fa-circle"></i> Signature &amp; magic byte inspection
+                <div class="scan-step pending" data-label="Checking for disguised file types (magic bytes)">
+                    <i class="fa-regular fa-circle"></i> Checking for disguised file types (magic bytes)
                 </div>
-                <div class="scan-step pending" data-label="Cryptographic hashing (MD5 / SHA-256)">
-                    <i class="fa-regular fa-circle"></i> Cryptographic hashing (MD5 / SHA-256)
+                <div class="scan-step pending" data-label="Generating digital fingerprints (MD5 &amp; SHA-256)">
+                    <i class="fa-regular fa-circle"></i> Generating digital fingerprints (MD5 &amp; SHA-256)
                 </div>
-                <div class="scan-step pending" data-label="Shannon entropy computation (0 - 8)">
-                    <i class="fa-regular fa-circle"></i> Shannon entropy computation (0 - 8)
+                <div class="scan-step pending" data-label="Measuring code scrambling / entropy (0 - 8)">
+                    <i class="fa-regular fa-circle"></i> Measuring code scrambling / entropy (0 - 8)
                 </div>
-                <div class="scan-step pending" data-label="Printable strings extraction">
-                    <i class="fa-regular fa-circle"></i> Printable strings extraction
+                <div class="scan-step pending" data-label="Extracting readable text &amp; web links">
+                    <i class="fa-regular fa-circle"></i> Extracting readable text &amp; web links
                 </div>
-                <div class="scan-step pending" data-label="Windows PE header &amp; section analysis">
-                    <i class="fa-regular fa-circle"></i> Windows PE header &amp; section analysis
+                <div class="scan-step pending" data-label="Inspecting program structure safely (PE headers)">
+                    <i class="fa-regular fa-circle"></i> Inspecting program structure safely (PE headers)
                 </div>
-                <div class="scan-step pending" data-label="Heuristic risk engine evaluation">
-                    <i class="fa-regular fa-circle"></i> Heuristic risk engine evaluation
+                <div class="scan-step pending" data-label="Calculating final safety risk score">
+                    <i class="fa-regular fa-circle"></i> Calculating final safety risk score
                 </div>
             </div>
 
             <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
-                TRANSMITTING TO FASTAPI CORE...
+                SCANNING SAFELY IN MEMORY...
             </div>
         </div>
     </div>
@@ -160,11 +168,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
-            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+            <div>&copy; 2026 Malicious File Analyzer. Designed for simple, safe, and transparent file inspection.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem;">
                 <span>FASTAPI BACKEND</span>
                 <span>•</span>
-                <span>VANILLA JS CONSOLE</span>
+                <span>SAFE STATIC ANALYSIS</span>
             </div>
         </div>
     </footer>
