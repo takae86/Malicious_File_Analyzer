@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results — Tactical Forensic Console</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="brand-icon-wrap">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <span>Malicious File Analyzer</span>
+                <span class="brand-tag">WAYNE_SEC</span>
+            </div>
+            <div class="navbar-links">
+                <a href="index.html"><i class="fa-solid fa-terminal"></i> Dashboard</a>
+                <a href="upload.html"><i class="fa-solid fa-file-shield"></i> Analyze File</a>
+                <a href="results.html" class="active"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+            </div>
+            <div class="navbar-status">
+                <span class="status-indicator"></span>
+                <span>ENGINE // ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Empty State Container (shown when no results exist) -->
+        <div id="results-empty-state" class="card" style="display: none; text-align: center; padding: 4.5rem 2rem; margin-bottom: 2rem;">
+            <i class="fa-regular fa-folder-open" style="font-size: 3.5rem; color: var(--text-muted); margin-bottom: 1.25rem;"></i>
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 800;">No Forensic Results Recorded</h2>
+            <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto 1.5rem auto; font-size: 0.95rem;">
+                Select and ingest files to run static signature detection, hash calculation, entropy analysis, and heuristic risk assessment.
+            </p>
+            <a href="upload.html" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-shield-virus"></i> Ingest Files for Triage
+            </a>
+        </div>
+
+        <!-- Hero Risk Summary Banner -->
+        <section id="results-hero-section" class="results-header-banner" style="display: none;">
+            <div class="results-hero-risk">
+                <div class="risk-score-badge low" id="res-risk-badge">
+                    <div class="risk-label">HEURISTIC RISK</div>
+                    <div class="risk-level-text" id="res-risk-text">LOW</div>
+                </div>
+                <div>
+                    <div class="tactical-tag" style="margin-bottom: 0.25rem; color: var(--accent-gold);">
+                        INCIDENT DOSSIER // RECENT SAMPLE
+                    </div>
+                    <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem;" id="res-filename">
+                        sample.exe
+                    </h1>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;" id="res-risk-summary">
+                        Standard static characteristics observed. No elevated heuristic flags.
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;">
+                <div class="risk-disclaimer">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Heuristic indicator, not a definitive malware verdict.</span>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="#" id="res-view-report-btn" class="btn btn-primary">
+                        <i class="fa-solid fa-file-waveform"></i> View Detailed Report
+                    </a>
+                    <a href="upload.html" class="btn btn-secondary">
+                        <i class="fa-solid fa-plus"></i> Analyze Another
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Panels Section -->
+        <section id="results-details-section" style="display: none; margin-bottom: 3rem;">
+            <div class="report-grid">
+                <!-- Left Column: Core Technical Findings -->
+                <div>
+                    <!-- File Overview Card -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-title">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span>File Overview</span>
+                            </div>
+                            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-gold);" id="res-analysis-id">
+                                ID: N/A
+                            </span>
+                        </div>
+                        <div class="kv-grid">
+                            <div class="kv-item">
+                                <span class="kv-label">Detected File Type</span>
+                                <span class="kv-value" id="res-filetype">Windows PE Executable</span>
+                            </div>
+                            <div class="kv-item">
+                                <span class="kv-label">File Size</span>
+                                <span class="kv-value" id="res-filesize">248 KB</span>
+                            </div>
+                            <div class="kv-item">
+                                <span class="kv-label">Magic Byte Signature</span>
+                                <span class="kv-value mono" id="res-signature">MZ (4D 5A)</span>
+                            </div>
+                            <div class="kv-item">
+                                <span class="kv-label">Shannon Entropy</span>
+                                <span class="kv-value mono" id="res-entropy">7.42 / 8.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shannon Entropy Visualizer -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-title">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <span>Shannon Entropy Distribution</span>
+                            </div>
+                        </div>
+                        <div class="entropy-meter-wrap">
+                            <div class="entropy-track">
+                                <div class="entropy-fill" id="res-entropy-fill" style="width: 50%;"></div>
+                            </div>
+                            <div class="entropy-legend">
+                                <span>0.00 (Structured / Plain)</span>
+                                <span>4.00 (Mixed)</span>
+                                <span>8.00 (Packed / Encrypted)</span>
+                            </div>
+                            <p class="entropy-desc">
+                                Entropy quantifies randomness within binary byte distributions. High entropy values (&gt; 7.0) often indicate packed, compressed, or encrypted sections.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Heuristic Indicators -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-title">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span>Analysis Indicators</span>
+                            </div>
+                        </div>
+                        <div id="res-indicators-list" class="indicator-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Hashes & PE Information -->
+                <div>
+                    <!-- Cryptographic Hashes Card -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-title">
+                                <i class="fa-solid fa-fingerprint"></i>
+                                <span>Cryptographic Fingerprints</span>
+                            </div>
+                        </div>
+                        
+                        <!-- MD5 Box -->
+                        <div class="hash-card">
+                            <div class="hash-info">
+                                <div class="hash-type">MD5</div>
+                                <div class="hash-val" id="res-md5">Calculating...</div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm btn-copy" data-copy-target="res-md5" title="Copy MD5 hash">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <!-- SHA-256 Box -->
+                        <div class="hash-card">
+                            <div class="hash-info">
+                                <div class="hash-type">SHA-256</div>
+                                <div class="hash-val" id="res-sha256">Calculating...</div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm btn-copy" data-copy-target="res-sha256" title="Copy SHA-256 hash">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PE Analysis Preview Card -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-title">
+                                <i class="fa-brands fa-windows"></i>
+                                <span>Portable Executable (PE)</span>
+                            </div>
+                        </div>
+                        <div id="res-pe-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Analyses / Historical Table Section -->
+        <section>
+            <div class="section-header">
+                <div>
+                    <div class="tactical-tag" style="margin-bottom: 0.25rem;">HISTORICAL ARCHIVE // ALL SESSIONS</div>
+                    <div class="section-title">
+                        <i class="fa-solid fa-database"></i>
+                        <span>All Analyzed Files</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter and Search Toolbar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button type="button" class="filter-btn active" data-filter="all">All Files</button>
+                    <button type="button" class="filter-btn" data-filter="high">High Risk</button>
+                    <button type="button" class="filter-btn" data-filter="medium">Medium Risk</button>
+                    <button type="button" class="filter-btn" data-filter="low">Low Risk</button>
+                </div>
+                <div class="search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-results-input" class="search-input" placeholder="Search by filename or type..." />
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container">
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>File Type</th>
+                            <th>Entropy</th>
+                            <th>Risk</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-results-body">
+                        <!-- Populated dynamically via results.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>&copy; 2026 Wayne Enterprises Security Systems. Malicious File Analyzer static triage platform.</div>
+            <div style="display: flex; gap: 1rem; font-family: var(--font-mono);">
+                <span>FASTAPI BACKEND</span>
+                <span>•</span>
+                <span>VANILLA JS CONSOLE</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>

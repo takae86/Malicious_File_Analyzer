@@ -1,3 +1,3 @@
 """
-Malicious File Analyzer - Backend Package.
+Backend package initializer.
 """

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary analysis uploads
+backend/temp_uploads/
+temp/
+tmp/
+*.tmp
+
+# System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
